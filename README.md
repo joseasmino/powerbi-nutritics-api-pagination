@@ -1,39 +1,61 @@
 # Power BI – Nutritics API Pagination (Cloud Compatible)
 
-This repository documents the implementation of Nutritics API ingestion in Power BI Service using native M Query pagination without requiring an on-premises gateway.
+This project demonstrates how to connect the Nutritics API to Power BI using native Power Query (M) with pagination, fully compatible with Power BI Service scheduled refresh — without using Python or a data gateway.
 
 ---
 
-## Objective
+## 🎯 Objective
 
-Enable API-based data ingestion from the Nutritics endpoint in Power BI Service (Web), supporting pagination beyond the API’s 100-record limit per request while allowing scheduled cloud refresh.
-
----
-
-## Background
-
-- Nutritics API limits responses to **100 records per request**.
-- Initial implementation used Python and worked locally.
-- Power BI Service does not execute Python natively.
-- Dynamic URLs in M Query disable scheduled refresh.
-- Power BI Service enforces a **4-minute timeout per query**.
-
-To ensure cloud compatibility:
-- A static base URL must be used.
-- Query parameters must be defined using the `Query` record in `Web.Contents`.
+Retrieve all records from the Nutritics API (100 per batch) using a cloud-compatible pagination pattern, while enabling automatic refresh in Power BI Service.
 
 ---
 
-## Implementation Approach
+## 🚀 What This Project Solves
 
-### 1. Static Base URL Pattern
+The Nutritics API:
 
-To avoid Dynamic Data Source errors:
+- Returns only 100 records per request
+- Requires pagination to retrieve full datasets
 
-```m
-Web.Contents(
-    BaseUrl,
-    [
-        Query = [...]
-    ]
-)
+Common Issues:
+
+- Python scripts require a gateway in Power BI Service
+- Dynamic URLs break scheduled refresh
+- Large datasets risk timeout failures
+
+This implementation solves those problems using a fully cloud-native M Query approach.
+
+---
+
+## 🛠 Implementation Highlights
+
+- Uses `List.Generate` for pagination
+- Maintains a static base URL to avoid dynamic data source errors
+- Separates query parameters using `Web.Contents` with the `Query` option
+- Combines all API batches into a single semantic model table
+- Enables scheduled refresh in Power BI Service
+
+---
+
+## ☁ Power BI Service Compatibility
+
+After publishing:
+
+- Configure **Basic Authentication** in Data Source Credentials
+- Set Privacy Level to **Organizational**
+- Enable Scheduled Refresh
+
+No gateway required.
+
+---
+
+## ⚠ Limitations
+
+- 100 records per API request (API constraint)
+- 4-minute timeout per query in Power BI Service
+- Large datasets may require incremental refresh
+
+---
+
+## 📁 Repository Structure
+
