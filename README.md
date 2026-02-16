@@ -57,5 +57,4 @@ No gateway required.
 
 ---
 
-## 📁 Repository Structure
 
